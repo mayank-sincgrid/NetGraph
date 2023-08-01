@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neo4j Data Visualization</title>
+    <style>
+        #viz {
+            width: 800px;
+            height: 600px;
+        }
+    </style>
+    
+    <script src="https://unpkg.com/neovis.js@2.0.2"></script>
+
+    <script type="text/javascript">
+
+        let neoViz;
+    
+        function draw() {
+            var config = {
+            containerId: "viz",
+            neo4j: {
+                serverUrl: "<YOUR_URI_WITHOUT+S>",
+                serverUser: "neo4j",
+                serverPassword: "<PASSWORD>",
+                driverConfig: { 
+                    encrypted: "ENCRYPTION_ON",
+                    trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
+                    }   
+            },
+            labels: {
+                User: {
+            label: 'name',
+            // group: 'community',
+            // caption:true,
+            [NeoVis.NEOVIS_ADVANCED_CONFIG]: {
+                  "static": {
+                    "color": "lightgreen",
+                    "shape": "dot",
+                    "value": 10,
+                    "font": {
+                      "color": "black",
+                      "background": "none",
+                      "strokeWidth": "0",
+                      "size": "15"
+                    }
+                },
+            //   cypher: {
+            //     value: 'MATCH (n) WHERE id(n) = $id RETURN n.size',
+            //   },
+              function: {
+                title: NeoVis.objectToTitleHtml,
+              },
+            },
+          },
+            },
+            relationships: {
+                KNOWS: {
+                    value: "weight"
+                }
+            },
+            initialCypher: "MATCH p=()-[:KNOWS]->() RETURN p LIMIT 25"
+        };
+
+        neoViz = new NeoVis.default(config);
+        neoViz.render();
+    }
+    </script>
+</head>
+<body onload="draw()">
+    <div id="viz"></div>
+    <h1>GRAPH</h1>
+    
+</body>
+</html> 
